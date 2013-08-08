@@ -1,0 +1,14 @@
+---
+development:
+  adapter: sqlite3
+  database: db/opinions_development
+  pool: 5
+  timeout: 5000
+  username: opinions
+
+test:
+  adapter: sqlite3
+  database: db/opinions_test
+  pool: 5
+  timeout: 5000
+  username: opinions
