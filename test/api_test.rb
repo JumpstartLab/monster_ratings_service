@@ -54,4 +54,22 @@ class APITest < Minitest::Test
     end
   end
 
+  def test_it_writes_a_rating
+    temporarily do
+      data = {"user_id" => 2, "product_id" => 3, 
+                "stars" => 4, "title" => "the title",
+                "body" => "the body"}
+      params = {"rating" => data}.to_json
+      assert_equal 0, Opinions::Rating.count
+      post "/products/#{params['product_id']}/ratings", params
+      assert_equal 201, last_response.status
+      rating = Opinions::Rating.first
+      assert_equal data["user_id"], rating.user_id
+      assert_equal data["product_id"], rating.product_id
+      assert_equal data["stars"], rating.stars
+      assert_equal data["title"], rating.title
+      assert_equal data["body"], rating.body
+    end
+  end
+
 end
