@@ -89,7 +89,7 @@ class APITest < Minitest::Test
     end
   end
 
-  def test_it_fails_to_write_an_imcomplete_rating
+  def test_it_fails_to_write_an_incomplete_rating
     temporarily do
       mandatory_fields = valid_data.keys - ["product_id"]
       mandatory_fields.each do |target|
