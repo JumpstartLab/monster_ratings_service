@@ -24,6 +24,8 @@ class API < Sinatra::Base
 
   post "/products/:product_id/ratings" do |product_id|
     data = json_params_from(request)["rating"]
+    data.delete("created_at")
+    data.delete("updated_at")
     rating = Opinions::Rating.new data
     if rating.save
       status 201
