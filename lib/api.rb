@@ -24,9 +24,14 @@ class API < Sinatra::Base
 
   post "/products/:product_id/ratings" do |product_id|
     data = json_params_from(request)["rating"]
-    rating = Opinions::Rating.create data
-    status 201
-    rating.to_json
+    rating = Opinions::Rating.new data
+    if rating.save
+      status 201
+      rating.to_json
+    else
+      status 400
+      rating.errors.inspect
+    end
   end
 
   def json_params_from(request)
