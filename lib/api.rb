@@ -36,6 +36,21 @@ class API < Sinatra::Base
     end
   end
 
+  put "/products/:product_id/ratings/:user_id" do |product_id, user_id|
+    data = json_params_from(request)["rating"]
+    data.delete("created_at")
+    data.delete("updated_at")
+    rating = Opinions::Rating.find_unique(product_id, user_id)
+
+    if rating.update_attributes(data)
+      status 200
+      rating.to_json
+    else
+      status 400
+      rating.errors.inspect
+    end
+  end
+
   def json_params_from(request)
     request.body.rewind
     JSON.parse(request.body.read)

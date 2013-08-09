@@ -89,6 +89,24 @@ class APITest < Minitest::Test
     end
   end
 
+  def test_it_updates_a_rating
+    temporarily do
+      original_data = valid_data.merge({'stars' => 1})
+      updating_data = valid_data.merge({'stars' => 2})
+
+      assert_equal 0, Opinions::Rating.count
+      Opinions::Rating.create(original_data)
+      assert_equal 1, Opinions::Rating.count
+      
+      params = {"rating" => updating_data}.to_json
+      
+      put "/products/#{original_data['product_id']}/ratings/#{original_data['user_id']}", params
+      assert_equal 200, last_response.status
+      rating = Opinions::Rating.first
+      assert_equal 2, rating.stars
+    end
+  end
+
   def test_it_fails_to_write_an_incomplete_rating
     temporarily do
       mandatory_fields = valid_data.keys - ["product_id"]
